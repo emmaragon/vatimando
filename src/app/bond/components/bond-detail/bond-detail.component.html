@@ -1,0 +1,92 @@
+<div>
+  <div class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border dialog-style text-color">
+      <div class="flex flex-row p-2 items-center">
+        <h2 mat-dialog-title class="tracking-tight">Job {{currentHolder}}</h2>
+      </div>
+      <form [formGroup]="holderForm1" (ngSubmit)="save()" style="padding: 0.2em 1em;">
+        <fieldset>
+          <mat-dialog-content>
+            <input hidden formControlName="taxId">
+            <div class="flex flex-col space-y-3">
+              <div class="flex sm:flex-row sm:space-x-4 sm:space-y-0 flex-col space-y-3">
+                <mat-form-field class="w-full">
+                  <mat-label>Schedtable</mat-label>
+                  <input autocomplete="off" matInput formControlName="businessName" required>
+                  <mat-icon matPrefix class="my-icon">business</mat-icon>
+                  <mat-error *ngIf="holderForm1.controls.businessName.hasError('required')">
+                    Este campo es requerido.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="flex sm:flex-row sm:space-x-1 sm:space-y-0 flex-col space-y-3">
+                <mat-form-field class="w-1/2">
+                  <mat-label>Application</mat-label>
+                  <input matInput formControlName="bondCode" autocomplete="off" readonly />
+                </mat-form-field>
+                <mat-form-field class="sm:w-1/2 w-full">
+                  <mat-label>Order Id</mat-label>
+                  <input matInput formControlName="holderId" autocomplete="off" maxlength="8"/>
+                </mat-form-field>
+              </div>
+
+              <div class="flex sm:flex-row sm:space-x-4 sm:space-y-0 flex-col space-y-3">
+                <mat-form-field class="w-full">
+                  <mat-label>Tipo Error</mat-label>
+                  <input autocomplete="off" matInput formControlName="holderName" required>
+                  <mat-icon matPrefix class="my-icon">person_outline</mat-icon>
+                  <mat-error *ngIf="holderForm1.controls.holderName.hasError('required')">
+                    Este campo es requerido.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="flex sm:flex-row sm:space-x-4 sm:space-y-0 flex-col space-y-3">
+                <mat-form-field class="w-full">
+                  <mat-label>Motivo</mat-label>
+                  <input autocomplete="off" matInput formControlName="holderLastName" required>
+                  <mat-icon matPrefix class="my-icon">person_outline</mat-icon>
+                  <mat-error *ngIf="holderForm1.controls.holderLastName.hasError('required')">
+                    Este campo es requerido.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+              <div class="flex sm:flex-row sm:space-x-4 sm:space-y-0 flex-col space-y-3">
+                <mat-form-field class="w-full">
+                  <mat-label>Medida</mat-label>
+                  <input autocomplete="off" matInput formControlName="phoneNumber" required maxlength="12">
+                  <mat-icon matPrefix class="my-icon">phone</mat-icon>
+                  <mat-error *ngIf="holderForm1.controls.phoneNumber.hasError('required')">
+                    Este campo es requerido.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-dialog-content>
+          <mat-dialog-actions class="example-button-row">
+            <button mat-raised-button type="button" color="basic" mat-dialog-close (click)="onClean()">
+              <mat-icon>cleaning_services</mat-icon> Limpiar
+            </button>
+            <button style="color:white" mat-raised-button type="button" color="accent" *ngIf="!isLast && totalHolders<3" mat-dialog-close (click)="onAdd()">
+              <mat-icon>add</mat-icon> Agregar
+            </button>
+            <button style="color:white" mat-raised-button color="primary" [disabled]="isLoading">
+              <app-button-loader *ngIf="isLoading"></app-button-loader>
+              <mat-icon *ngIf="!isLoading">save</mat-icon>
+                <span>Guardar</span>
+            </button>
+          </mat-dialog-actions>
+        </fieldset>
+      </form>
+      
+  </div>
+  <section>
+      <div class="example-flex-container">
+          <button mat-fab color="primary" (click)="onClick()">
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>
+      </div>
+  </section>
+  <!-- <app-bond-progress-spinner></app-bond-progress-spinner> -->
+</div>

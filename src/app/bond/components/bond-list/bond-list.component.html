@@ -1,0 +1,139 @@
+<ng-template #empty>
+    <div class="text-center">&ndash;&ndash;</div>
+  </ng-template>
+
+  <div class="flex flex-row bg-white rounded-lg shadow-lg overflow-hidden border list-style">
+    <mat-form-field class="btn-group">
+      <mat-label>Dependencia</mat-label>
+      <mat-select (selectionChange)="applyFilter($event)">
+        <mat-option *ngFor="let type of types" [value]="type.value">
+          {{type.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="btn-group">
+      <mat-label>Proyecto(s)</mat-label>
+      <mat-select [formControl]="projects" multiple (selectionChange)="multipleFilter($event)">
+        <mat-option *ngFor="let topping of projectList" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="margin-right: 29em;">
+      <input matInput [matDatepicker]="picker" placeholder="Fecha">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border list-style">
+    <div class="flex flex-row p-2 items-center">
+      <h3 mat-dialog-title class="text-xl font-semibold" id="pg-title">Detalle de Jobs</h3>
+      <span class="flex-grow"></span>
+    </div>
+    <div class="flex-grow flex flex-col overflow-auto">
+      <div class="flex-grow overflow-auto relative">
+        <table aria-describedby="pg-title" mat-table class="min-w-full w-fit"  [dataSource]="dataSource">
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" style="margin-right:2em">
+              </mat-checkbox>
+            </th>
+            <th mat-cell *matCellDef="let row" style="border-bottom: #9ea0a36b 1.2px solid;">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </th>
+          </ng-container>
+          <ng-container matColumnDef="jobname">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              JOBNAME
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.jobname}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="schedtable">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              SCHEDTABLE
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.schedtable}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="application">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              APPLICATION
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.application; else empty">{{row.application}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="orderId">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              ORDER ID
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.orderId}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="errorType">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              TIPO ERROR
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.errorType}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="domain">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              DOMINIO
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.domain; else empty">{{row.domain}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="project">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              PROYECTO
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.project; else empty">{{row.project}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="errorCause">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              MOTIVO ERROR
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.errorCause; else empty">{{row.errorCause}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="measure">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              MEDIDA
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.measure; else empty">{{row.measure}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th scope="col" mat-header-cell *matHeaderCellDef>
+              
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span><button mat-mini-fab color="primary" style="color:white" (click)="onEdit(row.jobname)" ><mat-icon>edit</mat-icon></button></span>
+            </td>
+        </ng-container> 
+          <tr class="bg-gray-100" mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr class="hover:bg-gray-50" mat-row *matRowDef="let row; columns: displayedColumns">
+        </table>
+        <div *ngIf="isLoading" class="loading-shade">
+          <mat-spinner color="accent"></mat-spinner>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
